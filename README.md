@@ -1,11 +1,6 @@
 # 🧭 TourApp — AWS Infrastructure & Deployment
 
-![Flask](https://img.shields.io/badge/Flask-Backend-black?logo=flask)
-![Terraform](https://img.shields.io/badge/Terraform-IaC-844FBA?logo=terraform)
-![AWS](https://img.shields.io/badge/AWS-Singapore-orange?logo=amazonaws)
-![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED?logo=docker)
-![MySQL](https://img.shields.io/badge/RDS-MySQL%208.0-4479A1?logo=mysql)
-![License](https://img.shields.io/badge/License-MIT-green)
+![Flask](demo.png)
 
 A Flask-based tour/travel booking application deployed on AWS (Singapore region) using a custom VPC, EC2, and RDS — provisioned with Terraform and containerized with Docker.
 
