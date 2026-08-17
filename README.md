@@ -56,30 +56,9 @@ This project provisions a production-style AWS network from scratch and deploys 
 
 ## Architecture
 
-```
-                        Internet
-                            │
-                    ┌───────▼────────┐
-                    │ Internet Gateway│
-                    └───────┬────────┘
-                            │
-        ┌───────────────────────────────────┐
-        │        VPC — 10.0.0.0/16            │
-        │                                     │
-        │   ┌─────────────────────────┐       │
-        │   │  Public Subnet (10.0.1.0/24)      │
-        │   │  ┌─────────────────┐    │       │
-        │   │  │  EC2 (Ubuntu)    │    │       │
-        │   │  │  Docker: Flask   │    │       │
-        │   │  └────────┬─────────┘    │       │
-        │   └───────────┼──────────────┘       │
-        │               │                       │
-        │   ┌───────────▼──────────────┐        │
-        │   │  Private Subnets (AZ-a / AZ-b)     │
-        │   │  RDS MySQL (private only)          │
-        │   └─────────────────────────┘         │
-        └───────────────────────────────────┘
-```
+
+![Flask](arch.png)
+
 
 | Component | Detail |
 |---|---|
