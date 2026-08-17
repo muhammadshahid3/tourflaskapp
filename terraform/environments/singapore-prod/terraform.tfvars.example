@@ -1,0 +1,8 @@
+# Copy this file to terraform.tfvars and fill in your own values.
+# terraform.tfvars is gitignored - never commit real secrets.
+
+key_name    = "tourapp-key"
+my_ip       = "1.2.3.4/32"
+db_username = "travel_user"
+db_password = "changeme"
+db_name     = "travel_booking"
