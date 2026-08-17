@@ -1,0 +1,35 @@
+{% extends "admin/layout.html" %}
+{% block page_title %}Destinations{% endblock %}
+{% block admin_content %}
+<div class="d-flex justify-content-end mb-3">
+  <a href="{{ url_for('admin.add_destination') }}" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Add Destination</a>
+</div>
+<div class="card border-0 shadow-sm rounded-4">
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table align-middle">
+        <thead><tr><th>Image</th><th>Name</th><th>City</th><th>Country</th><th># Tours</th><th class="text-end">Actions</th></tr></thead>
+        <tbody>
+          {% for d in destinations %}
+          <tr>
+            <td><img src="{{ d.image and url_for('static', filename=d.image) or 'https://via.placeholder.com/60' }}" width="50" height="50" class="rounded" style="object-fit:cover;"></td>
+            <td class="fw-semibold">{{ d.name }}</td>
+            <td>{{ d.city }}</td>
+            <td>{{ d.country }}</td>
+            <td>{{ d.tours|length }}</td>
+            <td class="text-end">
+              <a href="{{ url_for('admin.edit_destination', destination_id=d.id) }}" class="btn btn-sm btn-outline-primary"><i class="fa-solid fa-pen"></i></a>
+              <form action="{{ url_for('admin.delete_destination', destination_id=d.id) }}" method="post" class="d-inline" onsubmit="return confirm('Delete this destination?');">
+                <button type="submit" class="btn btn-sm btn-outline-danger"><i class="fa-solid fa-trash"></i></button>
+              </form>
+            </td>
+          </tr>
+          {% else %}
+          <tr><td colspan="6" class="text-center text-secondary py-4">No destinations yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

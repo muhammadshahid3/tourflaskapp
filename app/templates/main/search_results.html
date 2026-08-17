@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Search Results{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <h2 class="fw-bold mb-4">Search Results for "{{ query }}"</h2>
+  <div class="row g-4">
+    {% for t in tours %}
+    <div class="col-md-4">
+      <div class="tour-card card position-relative">
+        <span class="badge-status bg-{{ 'success' if t.status == 'Available' else 'secondary' }} text-white">{{ t.status }}</span>
+        <img src="{{ t.image and url_for('static', filename=t.image) or 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=800&q=80' }}" class="card-img-top" alt="{{ t.title }}">
+        <div class="card-body">
+          <h5 class="fw-bold mb-1">{{ t.title }}</h5>
+          <p class="text-secondary mb-2"><i class="fa-solid fa-location-dot"></i> {{ t.destination.name }}</p>
+          <span class="fw-bold fs-5 text-primary">{{ t.discounted_price|currency }}</span>
+          <a href="{{ url_for('auth.user_login', next=url_for('user.tour_detail', tour_id=t.id)) }}" class="btn btn-outline-primary w-100 mt-3">View Details</a>
+        </div>
+      </div>
+    </div>
+    {% else %}
+    <div class="col-12 text-center text-secondary py-5">
+      <i class="fa-solid fa-magnifying-glass fs-1 mb-3 d-block"></i>
+      No tours matched your search. Try a different keyword.
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

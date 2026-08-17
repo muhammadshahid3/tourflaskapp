@@ -1,0 +1,68 @@
+{% extends "user/layout.html" %}
+{% block title %}{{ tour.title }}{% endblock %}
+{% block user_content %}
+
+<div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-4">
+  <img src="{{ tour.image and url_for('static', filename=tour.image) or 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=1200&q=80' }}" style="height:320px;object-fit:cover;" alt="{{ tour.title }}">
+  <div class="card-body p-4">
+    <div class="d-flex justify-content-between align-items-start flex-wrap">
+      <div>
+        <h3 class="fw-bold mb-1">{{ tour.title }}</h3>
+        <p class="text-secondary mb-1"><i class="fa-solid fa-location-dot"></i> {{ tour.destination.name }}, {{ tour.destination.country }}</p>
+        <span class="badge bg-{{ 'success' if tour.status == 'Available' else 'secondary' }}">{{ tour.status }}</span>
+        <span class="text-warning ms-2"><i class="fa-solid fa-star"></i> {{ tour.rating }}</span>
+      </div>
+      <div class="text-end">
+        <span class="fs-3 fw-bold text-primary">{{ tour.discounted_price|currency }}</span>
+        {% if tour.discount and tour.discount > 0 %}<div class="text-secondary text-decoration-line-through">{{ tour.price|currency }}</div>{% endif %}
+        <small class="text-secondary">per person</small>
+      </div>
+    </div>
+
+    <hr>
+    <p>{{ tour.description }}</p>
+
+    <div class="row g-3 mb-3">
+      <div class="col-md-3"><i class="fa-solid fa-clock text-primary"></i> <strong>Duration:</strong> {{ tour.duration or '—' }}</div>
+      <div class="col-md-3"><i class="fa-solid fa-users text-primary"></i> <strong>Max Guests:</strong> {{ tour.max_guests }}</div>
+      <div class="col-md-3"><i class="fa-solid fa-chair text-primary"></i> <strong>Seats Left:</strong> {{ tour.available_seats }}</div>
+      <div class="col-md-3"><i class="fa-solid fa-hotel text-primary"></i> <strong>Hotel:</strong> {{ tour.hotel or '—' }}</div>
+      <div class="col-md-3"><i class="fa-solid fa-bus text-primary"></i> <strong>Transport:</strong> {{ tour.transport or '—' }}</div>
+      {% if tour.start_date %}<div class="col-md-3"><i class="fa-solid fa-calendar text-primary"></i> <strong>Start:</strong> {{ tour.start_date.strftime('%b %d, %Y') }}</div>{% endif %}
+      {% if tour.end_date %}<div class="col-md-3"><i class="fa-solid fa-calendar-check text-primary"></i> <strong>End:</strong> {{ tour.end_date.strftime('%b %d, %Y') }}</div>{% endif %}
+    </div>
+
+    <div class="row g-4">
+      <div class="col-md-6">
+        <h6 class="fw-bold text-success"><i class="fa-solid fa-circle-check"></i> Included</h6>
+        <p class="text-secondary">{{ tour.included_services or 'Not specified' }}</p>
+      </div>
+      <div class="col-md-6">
+        <h6 class="fw-bold text-danger"><i class="fa-solid fa-circle-xmark"></i> Excluded</h6>
+        <p class="text-secondary">{{ tour.excluded_services or 'Not specified' }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card border-0 shadow-sm rounded-4">
+  <div class="card-body p-4">
+    <h5 class="fw-bold mb-3">Book This Tour</h5>
+    {% if tour.status == 'Available' and tour.available_seats > 0 %}
+    <form method="post" action="{{ url_for('user.book_tour', tour_id=tour.id) }}" class="row g-2 align-items-end loading-form">
+      {{ form.hidden_tag() }}
+      <div class="col-md-4">
+        {{ form.persons.label(class_="form-label fw-semibold") }}
+        {{ form.persons(class_="form-control", min=1, max=tour.max_guests, value=1) }}
+      </div>
+      <div class="col-md-4">
+        {{ form.submit(class_="btn btn-primary btn-lg w-100") }}
+      </div>
+    </form>
+    {% else %}
+    <div class="alert alert-secondary mb-0">This tour is currently sold out.</div>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends "admin/layout.html" %}
+{% block page_title %}Tours{% endblock %}
+{% block admin_content %}
+<div class="d-flex justify-content-end mb-3">
+  <a href="{{ url_for('admin.add_tour') }}" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Add Tour</a>
+</div>
+<div class="card border-0 shadow-sm rounded-4">
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table align-middle">
+        <thead><tr><th>Image</th><th>Title</th><th>Destination</th><th>Category</th><th>Price</th><th>Seats</th><th>Status</th><th class="text-end">Actions</th></tr></thead>
+        <tbody>
+          {% for t in tours %}
+          <tr>
+            <td><img src="{{ t.image and url_for('static', filename=t.image) or 'https://via.placeholder.com/60' }}" width="50" height="50" class="rounded" style="object-fit:cover;"></td>
+            <td class="fw-semibold">{{ t.title }}</td>
+            <td>{{ t.destination.name }}</td>
+            <td>{{ t.category.name }}</td>
+            <td>{{ t.price|currency }}</td>
+            <td>{{ t.available_seats }}/{{ t.max_guests }}</td>
+            <td><span class="badge bg-{{ 'success' if t.status == 'Available' else 'secondary' }}">{{ t.status }}</span></td>
+            <td class="text-end">
+              <a href="{{ url_for('admin.edit_tour', tour_id=t.id) }}" class="btn btn-sm btn-outline-primary"><i class="fa-solid fa-pen"></i></a>
+              <form action="{{ url_for('admin.delete_tour', tour_id=t.id) }}" method="post" class="d-inline" onsubmit="return confirm('Delete this tour?');">
+                <button type="submit" class="btn btn-sm btn-outline-danger"><i class="fa-solid fa-trash"></i></button>
+              </form>
+            </td>
+          </tr>
+          {% else %}
+          <tr><td colspan="8" class="text-center text-secondary py-4">No tours yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

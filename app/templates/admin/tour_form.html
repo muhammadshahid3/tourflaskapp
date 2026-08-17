@@ -1,0 +1,73 @@
+{% extends "admin/layout.html" %}
+{% from "partials/_form_field.html" import field %}
+{% block page_title %}{{ title }}{% endblock %}
+{% block admin_content %}
+<div class="card border-0 shadow-sm rounded-4">
+  <div class="card-body p-4">
+    <form method="post" enctype="multipart/form-data" class="needs-validation loading-form" novalidate>
+      {{ form.hidden_tag() }}
+
+      {{ field(form.title) }}
+      <div class="mb-3">
+        {{ form.image.label(class_="form-label fw-semibold") }}
+        {{ form.image(class_="form-control") }}
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="mb-3">
+            {{ form.destination_id.label(class_="form-label fw-semibold") }}
+            {{ form.destination_id(class_="form-select") }}
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="mb-3">
+            {{ form.category_id.label(class_="form-label fw-semibold") }}
+            {{ form.category_id(class_="form-select") }}
+          </div>
+        </div>
+      </div>
+
+      {{ field(form.description) }}
+
+      <div class="row">
+        <div class="col-md-4">{{ field(form.duration) }}</div>
+        <div class="col-md-4">{{ field(form.price) }}</div>
+        <div class="col-md-4">{{ field(form.discount) }}</div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-4">{{ field(form.max_guests) }}</div>
+        <div class="col-md-4">{{ field(form.available_seats) }}</div>
+        <div class="col-md-4">
+          <div class="mb-3">
+            {{ form.status.label(class_="form-label fw-semibold") }}
+            {{ form.status(class_="form-select") }}
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">{{ field(form.start_date) }}</div>
+        <div class="col-md-6">{{ field(form.end_date) }}</div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">{{ field(form.included_services) }}</div>
+        <div class="col-md-6">{{ field(form.excluded_services) }}</div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-4">{{ field(form.hotel) }}</div>
+        <div class="col-md-4">{{ field(form.transport) }}</div>
+        <div class="col-md-4">{{ field(form.rating) }}</div>
+      </div>
+
+      <div class="d-flex gap-2 mt-2">
+        {{ form.submit(class_="btn btn-primary px-4") }}
+        <a href="{{ url_for('admin.tours') }}" class="btn btn-outline-secondary px-4">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

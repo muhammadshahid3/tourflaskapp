@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% from "partials/_form_field.html" import field %}
+{% block title %}User Login{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="card auth-card">
+    <div class="card-body p-4 p-md-5">
+      <div class="text-center mb-4">
+        <i class="fa-solid fa-user fs-1 text-primary"></i>
+        <h3 class="fw-bold mt-2">Welcome Back</h3>
+        <p class="text-secondary">Login to manage your bookings</p>
+      </div>
+      <form method="post" class="needs-validation loading-form" novalidate>
+        {{ form.hidden_tag() }}
+        {{ field(form.email, icon="fa-envelope") }}
+        {{ field(form.password, icon="fa-lock") }}
+        <div class="form-check mb-3">
+          {{ form.remember(class_="form-check-input") }}
+          {{ form.remember.label(class_="form-check-label") }}
+        </div>
+        <div class="d-grid">
+          {{ form.submit(class_="btn btn-primary btn-lg") }}
+        </div>
+      </form>
+      <div class="text-center mt-3">
+        <a href="{{ url_for('auth.forgot_password') }}" class="text-decoration-none">Forgot password?</a>
+      </div>
+      <hr>
+      <p class="text-center mb-0">New here? <a href="{{ url_for('auth.user_signup') }}">Create an account</a></p>
+    </div>
+  </div>
+</div>
+{% endblock %}

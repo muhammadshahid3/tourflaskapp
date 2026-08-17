@@ -1,0 +1,17 @@
+# Starts ONLY the Flask application container. The database is an
+# existing AWS RDS MySQL instance reached over the network using the
+# DB_* variables below — no local MySQL container is started.
+services:
+  web:
+    build: .
+    container_name: tour_booking_web
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    volumes:
+      - uploads_data:/app/app/static/images/uploads
+
+volumes:
+  uploads_data:

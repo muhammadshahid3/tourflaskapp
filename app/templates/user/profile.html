@@ -1,0 +1,22 @@
+{% extends "user/layout.html" %}
+{% from "partials/_form_field.html" import field %}
+{% block title %}My Profile{% endblock %}
+{% block user_content %}
+<div class="card border-0 shadow-sm rounded-4">
+  <div class="card-body p-4">
+    <h5 class="fw-bold mb-3">Update Profile</h5>
+    <form method="post" class="needs-validation loading-form" novalidate>
+      {{ form.hidden_tag() }}
+      {{ field(form.full_name, icon="fa-user") }}
+      {{ field(form.phone, icon="fa-phone") }}
+      {{ field(form.address, icon="fa-location-dot") }}
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Email</label>
+        <input type="email" class="form-control" value="{{ current_user.email }}" disabled>
+        <small class="text-secondary">Email cannot be changed.</small>
+      </div>
+      {{ form.submit(class_="btn btn-primary px-4") }}
+    </form>
+  </div>
+</div>
+{% endblock %}

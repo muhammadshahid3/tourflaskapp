@@ -1,0 +1,44 @@
+{% extends "admin/layout.html" %}
+{% block page_title %}Users{% endblock %}
+{% block admin_content %}
+<div class="card border-0 shadow-sm rounded-4">
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table align-middle">
+        <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Joined</th><th>Status</th><th class="text-end">Actions</th></tr></thead>
+        <tbody>
+          {% for u in users %}
+          <tr>
+            <td class="fw-semibold">{{ u.full_name }}</td>
+            <td>{{ u.email }}</td>
+            <td>{{ u.phone or '—' }}</td>
+            <td>{{ u.created_at.strftime('%b %d, %Y') }}</td>
+            <td>
+              {% if u.is_blocked %}<span class="badge bg-danger">Blocked</span>
+              {% elif not u.is_active_account %}<span class="badge bg-secondary">Inactive</span>
+              {% else %}<span class="badge bg-success">Active</span>{% endif %}
+            </td>
+            <td class="text-end">
+              {% if u.is_blocked or not u.is_active_account %}
+              <form action="{{ url_for('admin.activate_user', user_id=u.id) }}" method="post" class="d-inline">
+                <button class="btn btn-sm btn-outline-success"><i class="fa-solid fa-user-check"></i> Activate</button>
+              </form>
+              {% else %}
+              <form action="{{ url_for('admin.block_user', user_id=u.id) }}" method="post" class="d-inline">
+                <button class="btn btn-sm btn-outline-warning"><i class="fa-solid fa-user-slash"></i> Block</button>
+              </form>
+              {% endif %}
+              <form action="{{ url_for('admin.delete_user', user_id=u.id) }}" method="post" class="d-inline" onsubmit="return confirm('Delete this user? This also removes their bookings.');">
+                <button class="btn btn-sm btn-outline-danger"><i class="fa-solid fa-trash"></i></button>
+              </form>
+            </td>
+          </tr>
+          {% else %}
+          <tr><td colspan="6" class="text-center text-secondary py-4">No users yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

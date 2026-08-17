@@ -1,0 +1,37 @@
+{% extends "user/layout.html" %}
+{% block title %}My Dashboard{% endblock %}
+{% block user_content %}
+<div class="card border-0 shadow-sm rounded-4 mb-4">
+  <div class="card-body p-4">
+    <h4 class="fw-bold">Welcome back, {{ current_user.full_name.split(' ')[0] }} 👋</h4>
+    <p class="text-secondary mb-0">Here's a quick look at your recent activity.</p>
+  </div>
+</div>
+
+<div class="card border-0 shadow-sm rounded-4">
+  <div class="card-body p-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h5 class="fw-bold mb-0">Recent Bookings</h5>
+      <a href="{{ url_for('user.my_bookings') }}" class="btn btn-sm btn-outline-primary">View All</a>
+    </div>
+    <div class="table-responsive">
+      <table class="table align-middle">
+        <thead><tr><th>Tour</th><th>Persons</th><th>Total</th><th>Status</th><th>Date</th></tr></thead>
+        <tbody>
+          {% for b in recent_bookings %}
+          <tr>
+            <td>{{ b.tour.title }}</td>
+            <td>{{ b.persons }}</td>
+            <td>{{ b.total_price|currency }}</td>
+            <td><span class="badge bg-{{ 'warning text-dark' if b.booking_status == 'Pending' else 'success' if b.booking_status == 'Confirmed' else 'secondary' if b.booking_status == 'Completed' else 'danger' }}">{{ b.booking_status }}</span></td>
+            <td>{{ b.booking_date.strftime('%b %d, %Y') }}</td>
+          </tr>
+          {% else %}
+          <tr><td colspan="5" class="text-center text-secondary py-4">No bookings yet — <a href="{{ url_for('user.tours') }}">start exploring tours</a>.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

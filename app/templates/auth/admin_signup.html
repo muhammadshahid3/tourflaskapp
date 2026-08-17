@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% from "partials/_form_field.html" import field %}
+{% block title %}Admin Sign Up{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="card auth-card">
+    <div class="card-body p-4 p-md-5">
+      <div class="text-center mb-4">
+        <i class="fa-solid fa-user-shield fs-1 text-dark"></i>
+        <h3 class="fw-bold mt-2">Create Admin Account</h3>
+      </div>
+      <form method="post" class="needs-validation loading-form" novalidate>
+        {{ form.hidden_tag() }}
+        {{ field(form.name, icon="fa-user") }}
+        {{ field(form.email, icon="fa-envelope") }}
+        {{ field(form.password, icon="fa-lock") }}
+        {{ field(form.confirm_password, icon="fa-lock") }}
+        <div class="d-grid mt-2">
+          {{ form.submit(class_="btn btn-dark btn-lg") }}
+        </div>
+      </form>
+      <hr>
+      <p class="text-center mb-0">Already an admin? <a href="{{ url_for('auth.admin_login') }}">Login</a></p>
+    </div>
+  </div>
+</div>
+{% endblock %}

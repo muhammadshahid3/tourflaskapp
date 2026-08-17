@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+{% block title %}Wanderly — Discover Your Next Adventure{% endblock %}
+
+{% block content %}
+
+<section class="hero-section text-center">
+  <div class="container">
+    <span class="badge rounded-pill bg-primary mb-3 px-3 py-2">✈ Over 500+ curated tours worldwide</span>
+    <h1 class="display-4 fw-bold mb-3">Explore the World, <br>One Tour at a Time</h1>
+    <p class="lead text-light-emphasis mb-0" style="max-width:600px;margin:0 auto;">
+      Handpicked destinations, transparent pricing, and unforgettable experiences — booked in minutes.
+    </p>
+  </div>
+</section>
+
+<div class="container">
+  <div class="search-card">
+    <form action="{{ url_for('main.search') }}" method="get" class="row g-2 align-items-end">
+      <div class="col-md-9">
+        <label class="form-label fw-semibold">Search tours, destinations, cities...</label>
+        <input type="text" name="q" class="form-control form-control-lg" placeholder="Try 'Bali', 'Safari', 'Paris'...">
+      </div>
+      <div class="col-md-3 d-grid">
+        <button type="submit" class="btn btn-primary btn-lg"><i class="fa-solid fa-magnifying-glass"></i> Search Tours</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<section class="container py-5">
+  <div class="text-center mb-5">
+    <h2 class="fw-bold">Browse by Category</h2>
+    <p class="text-secondary">Find the trip that matches your travel style</p>
+  </div>
+  <div class="row g-3">
+    {% for cat in categories %}
+    <div class="col-6 col-md-3">
+      <div class="category-pill">
+        <i class="fa-solid fa-umbrella-beach mb-2"></i>
+        <h6 class="fw-semibold mb-0 mt-2">{{ cat.name }}</h6>
+      </div>
+    </div>
+    {% else %}
+    <div class="col-12 text-center text-secondary">Categories will appear here once the admin adds some.</div>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="container py-5" id="destinations">
+  <div class="text-center mb-5">
+    <h2 class="fw-bold">Featured Destinations</h2>
+    <p class="text-secondary">Trending spots our travelers love right now</p>
+  </div>
+  <div class="row g-4">
+    {% for d in destinations %}
+    <div class="col-md-4">
+      <div class="destination-card card position-relative">
+        <img src="{{ d.image and url_for('static', filename=d.image) or 'https://images.unsplash.com/photo-1500835556837-99ac94a94552?auto=format&fit=crop&w=800&q=80' }}" class="card-img-top" alt="{{ d.name }}">
+        <div class="card-body">
+          <h5 class="fw-bold mb-1">{{ d.name }}</h5>
+          <p class="text-secondary mb-0"><i class="fa-solid fa-location-dot"></i> {{ d.city }}, {{ d.country }}</p>
+        </div>
+      </div>
+    </div>
+    {% else %}
+    <div class="col-12 text-center text-secondary">Destinations will appear here once the admin adds some.</div>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="container py-5" id="packages">
+  <div class="text-center mb-5">
+    <h2 class="fw-bold">Popular Tour Packages</h2>
+    <p class="text-secondary">Our most booked adventures</p>
+  </div>
+  <div class="row g-4">
+    {% for t in tours %}
+    <div class="col-md-4">
+      <div class="tour-card card position-relative">
+        {% if t.discount and t.discount > 0 %}<span class="badge-discount">-{{ t.discount|int }}%</span>{% endif %}
+        <span class="badge-status bg-{{ 'success' if t.status == 'Available' else 'secondary' }} text-white">{{ t.status }}</span>
+        <img src="{{ t.image and url_for('static', filename=t.image) or 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=800&q=80' }}" class="card-img-top" alt="{{ t.title }}">
+        <div class="card-body">
+          <h5 class="fw-bold mb-1">{{ t.title }}</h5>
+          <p class="text-secondary mb-2"><i class="fa-solid fa-location-dot"></i> {{ t.destination.name }} · <i class="fa-solid fa-clock"></i> {{ t.duration }}</p>
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <span class="fw-bold fs-5 text-primary">{{ t.discounted_price|currency }}</span>
+              {% if t.discount and t.discount > 0 %}<span class="text-secondary text-decoration-line-through small ms-1">{{ t.price|currency }}</span>{% endif %}
+            </div>
+            <span class="text-warning"><i class="fa-solid fa-star"></i> {{ t.rating }}</span>
+          </div>
+          <a href="{{ url_for('auth.user_login', next=url_for('user.tour_detail', tour_id=t.id)) }}" class="btn btn-outline-primary w-100 mt-3">View Details</a>
+        </div>
+      </div>
+    </div>
+    {% else %}
+    <div class="col-12 text-center text-secondary">Tour packages will appear here once the admin adds some.</div>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="bg-light py-5" id="testimonials">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="fw-bold">What Our Travelers Say</h2>
+      <p class="text-secondary">Real stories from real trips</p>
+    </div>
+    <div class="row g-4">
+      {% set testimonials = [
+        {"name":"Sarah Mitchell","trip":"Bali Adventure","text":"Every detail was handled beautifully. The best trip our family has ever taken.","avatar":"https://randomuser.me/api/portraits/women/68.jpg"},
+        {"name":"James Cooper","trip":"Swiss Alps Tour","text":"Seamless booking, responsive support, and a truly unforgettable itinerary.","avatar":"https://randomuser.me/api/portraits/men/32.jpg"},
+        {"name":"Aiko Tanaka","trip":"Japan Explorer","text":"From temples to street food, this tour covered everything on our wish list.","avatar":"https://randomuser.me/api/portraits/women/44.jpg"}
+      ] %}
+      {% for tst in testimonials %}
+      <div class="col-md-4">
+        <div class="testimonial-card card">
+          <div class="d-flex text-warning mb-3">
+            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+          </div>
+          <p class="text-secondary">"{{ tst.text }}"</p>
+          <div class="d-flex align-items-center mt-3">
+            <img src="{{ tst.avatar }}" class="rounded-circle me-3" width="48" height="48" alt="{{ tst.name }}">
+            <div>
+              <h6 class="fw-bold mb-0">{{ tst.name }}</h6>
+              <small class="text-secondary">{{ tst.trip }}</small>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="container py-5">
+  <div class="text-center mb-5">
+    <h2 class="fw-bold">Why Choose Wanderly</h2>
+    <p class="text-secondary">Travel with confidence, every step of the way</p>
+  </div>
+  <div class="row g-4 text-center">
+    {% set features = [
+      {"icon":"fa-shield-halved","title":"Trusted & Secure","text":"Verified partners and secure booking, every time."},
+      {"icon":"fa-tags","title":"Best Price Guarantee","text":"Transparent pricing with no hidden fees."},
+      {"icon":"fa-headset","title":"24/7 Support","text":"Real humans ready to help before, during, and after your trip."},
+      {"icon":"fa-route","title":"Curated Itineraries","text":"Every tour is designed and vetted by travel experts."}
+    ] %}
+    {% for f in features %}
+    <div class="col-md-3">
+      <div class="why-icon mx-auto mb-3"><i class="fa-solid {{ f.icon }}"></i></div>
+      <h6 class="fw-bold">{{ f.title }}</h6>
+      <p class="text-secondary small">{{ f.text }}</p>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+{% endblock %}

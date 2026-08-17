@@ -1,0 +1,22 @@
+{% extends "admin/layout.html" %}
+{% from "partials/_form_field.html" import field %}
+{% block page_title %}{{ title }}{% endblock %}
+{% block admin_content %}
+<div class="card border-0 shadow-sm rounded-4">
+  <div class="card-body p-4">
+    <form method="post" enctype="multipart/form-data" class="needs-validation loading-form" novalidate>
+      {{ form.hidden_tag() }}
+      {{ field(form.name) }}
+      {{ field(form.description) }}
+      <div class="mb-3">
+        {{ form.image.label(class_="form-label fw-semibold") }}
+        {{ form.image(class_="form-control") }}
+      </div>
+      <div class="d-flex gap-2">
+        {{ form.submit(class_="btn btn-primary px-4") }}
+        <a href="{{ url_for('admin.categories') }}" class="btn btn-outline-secondary px-4">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

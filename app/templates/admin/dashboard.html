@@ -1,0 +1,53 @@
+{% extends "admin/layout.html" %}
+{% block page_title %}Dashboard{% endblock %}
+{% block admin_content %}
+
+<div class="row g-4">
+  {% set cards = [
+    {"label":"Total Users","value":total_users,"icon":"fa-users","color":"#3b82f6"},
+    {"label":"Total Tours","value":total_tours,"icon":"fa-suitcase-rolling","color":"#f59e0b"},
+    {"label":"Total Bookings","value":total_bookings,"icon":"fa-calendar-check","color":"#10b981"},
+    {"label":"Total Categories","value":total_categories,"icon":"fa-tags","color":"#8b5cf6"},
+    {"label":"Total Destinations","value":total_destinations,"icon":"fa-map-location-dot","color":"#ef4444"},
+    {"label":"Total Revenue","value":total_revenue|currency,"icon":"fa-sack-dollar","color":"#059669"},
+  ] %}
+  {% for c in cards %}
+  <div class="col-md-4 col-lg-2">
+    <div class="stat-card">
+      <div class="stat-icon mb-3" style="background:{{ c.color }};">
+        <i class="fa-solid {{ c.icon }}"></i>
+      </div>
+      <h4 class="fw-bold mb-0">{{ c.value }}</h4>
+      <small class="text-secondary">{{ c.label }}</small>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+<div class="card border-0 shadow-sm rounded-4 mt-4">
+  <div class="card-body">
+    <h5 class="fw-bold mb-3">Recent Bookings</h5>
+    <div class="table-responsive">
+      <table class="table align-middle">
+        <thead><tr><th>#</th><th>Tour</th><th>User</th><th>Persons</th><th>Total</th><th>Status</th><th>Date</th></tr></thead>
+        <tbody>
+          {% for b in recent_bookings %}
+          <tr>
+            <td>{{ b.id }}</td>
+            <td>{{ b.tour.title }}</td>
+            <td>{{ b.user.full_name }}</td>
+            <td>{{ b.persons }}</td>
+            <td>{{ b.total_price|currency }}</td>
+            <td><span class="badge bg-{{ 'warning text-dark' if b.booking_status == 'Pending' else 'success' if b.booking_status == 'Confirmed' else 'secondary' if b.booking_status == 'Completed' else 'danger' }}">{{ b.booking_status }}</span></td>
+            <td>{{ b.booking_date.strftime('%b %d, %Y') }}</td>
+          </tr>
+          {% else %}
+          <tr><td colspan="7" class="text-center text-secondary py-4">No bookings yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

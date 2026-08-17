@@ -1,0 +1,76 @@
+{% extends "admin/layout.html" %}
+{% block page_title %}Reports{% endblock %}
+{% block admin_content %}
+
+<div class="row g-4 mb-4">
+  <div class="col-md-6">
+    <div class="card border-0 shadow-sm rounded-4 p-3">
+      <h6 class="fw-bold mb-3">Monthly Revenue (last 6 months)</h6>
+      <canvas id="revenueChart" height="220"></canvas>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card border-0 shadow-sm rounded-4 p-3">
+      <h6 class="fw-bold mb-3">Monthly Bookings (last 6 months)</h6>
+      <canvas id="bookingsChart" height="220"></canvas>
+    </div>
+  </div>
+</div>
+
+<div class="row g-4">
+  <div class="col-md-6">
+    <div class="card border-0 shadow-sm rounded-4">
+      <div class="card-body">
+        <h6 class="fw-bold mb-3">Most Booked Tours</h6>
+        <table class="table">
+          <tbody>
+            {% for title, cnt in most_booked %}
+            <tr><td>{{ title }}</td><td class="text-end fw-semibold">{{ cnt }} bookings</td></tr>
+            {% else %}
+            <tr><td class="text-secondary text-center py-3">No data yet.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card border-0 shadow-sm rounded-4">
+      <div class="card-body">
+        <h6 class="fw-bold mb-3">Popular Destinations</h6>
+        <table class="table">
+          <tbody>
+            {% for name, cnt in popular_destinations %}
+            <tr><td>{{ name }}</td><td class="text-end fw-semibold">{{ cnt }} bookings</td></tr>
+            {% else %}
+            <tr><td class="text-secondary text-center py-3">No data yet.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card border-0 shadow-sm rounded-4 mt-4 p-3">
+  <h6 class="fw-bold mb-0">Total Revenue to Date: <span class="text-primary">{{ total_revenue|currency }}</span></h6>
+</div>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script>
+  const labels = {{ labels|tojson }};
+  new Chart(document.getElementById('revenueChart'), {
+    type: 'line',
+    data: { labels: labels, datasets: [{ label: 'Revenue ($)', data: {{ monthly_revenue|tojson }}, borderColor: '#ff7a3d', backgroundColor: 'rgba(255,122,61,.15)', fill: true, tension: .3 }] },
+    options: { plugins: { legend: { display: false } } }
+  });
+  new Chart(document.getElementById('bookingsChart'), {
+    type: 'bar',
+    data: { labels: labels, datasets: [{ label: 'Bookings', data: {{ monthly_bookings|tojson }}, backgroundColor: '#12233b' }] },
+    options: { plugins: { legend: { display: false } } }
+  });
+</script>
+{% endblock %}

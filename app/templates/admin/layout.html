@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block navbar %}{% endblock %}
+{% block footer %}{% endblock %}
+{% block flashes %}{% endblock %}
+{% block content %}
+<div class="d-flex">
+  <div class="sidebar" style="width:260px; min-width:260px;">
+    <div class="brand"><i class="fa-solid fa-compass text-primary"></i> Wanderly Admin</div>
+    <a href="{{ url_for('admin.dashboard') }}" class="{{ 'active' if request.endpoint == 'admin.dashboard' }}"><i class="fa-solid fa-gauge-high me-2"></i> Dashboard</a>
+    <a href="{{ url_for('admin.categories') }}" class="{{ 'active' if 'category' in request.endpoint }}"><i class="fa-solid fa-tags me-2"></i> Categories</a>
+    <a href="{{ url_for('admin.destinations') }}" class="{{ 'active' if 'destination' in request.endpoint }}"><i class="fa-solid fa-map-location-dot me-2"></i> Destinations</a>
+    <a href="{{ url_for('admin.tours') }}" class="{{ 'active' if 'tour' in request.endpoint }}"><i class="fa-solid fa-suitcase-rolling me-2"></i> Tours</a>
+    <a href="{{ url_for('admin.bookings') }}" class="{{ 'active' if 'booking' in request.endpoint }}"><i class="fa-solid fa-calendar-check me-2"></i> Bookings</a>
+    <a href="{{ url_for('admin.users') }}" class="{{ 'active' if request.endpoint == 'admin.users' }}"><i class="fa-solid fa-users me-2"></i> Users</a>
+    <a href="{{ url_for('admin.reports') }}" class="{{ 'active' if request.endpoint == 'admin.reports' }}"><i class="fa-solid fa-chart-line me-2"></i> Reports</a>
+    <hr class="border-secondary mx-3">
+    <a href="{{ url_for('auth.admin_change_password') }}"><i class="fa-solid fa-key me-2"></i> Change Password</a>
+    <a href="{{ url_for('auth.admin_logout') }}"><i class="fa-solid fa-right-from-bracket me-2"></i> Logout</a>
+  </div>
+  <div class="flex-grow-1 p-4" style="background:#f7f8fb; min-height:100vh;">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h3 class="fw-bold mb-0">{% block page_title %}Dashboard{% endblock %}</h3>
+      <span class="text-secondary"><i class="fa-solid fa-user-shield"></i> {{ current_user.name }}</span>
+    </div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} alert-dismissible fade show">{{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    {% block admin_content %}{% endblock %}
+  </div>
+</div>
+{% endblock %}
