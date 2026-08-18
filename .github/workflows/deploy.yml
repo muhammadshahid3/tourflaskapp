@@ -21,7 +21,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
 
           script: |
-            cd ~/tourapp
+            cd ~/wandertrail_tourweb
 
             git pull origin main
 
